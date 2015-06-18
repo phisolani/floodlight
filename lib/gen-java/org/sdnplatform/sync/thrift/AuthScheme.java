@@ -6,11 +6,6 @@
  */
 package org.sdnplatform.sync.thrift;
 
-
-import java.util.Map;
-import java.util.HashMap;
-import org.apache.thrift.TEnum;
-
 @SuppressWarnings("all") public enum AuthScheme implements org.apache.thrift.TEnum {
   NO_AUTH(0),
   CHALLENGE_RESPONSE(1);
@@ -24,7 +19,8 @@ import org.apache.thrift.TEnum;
   /**
    * Get the integer value of this enum value, as defined in the Thrift IDL.
    */
-  public int getValue() {
+  @Override
+public int getValue() {
     return value;
   }
 

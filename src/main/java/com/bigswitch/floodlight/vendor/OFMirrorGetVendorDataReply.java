@@ -12,7 +12,8 @@ public class OFMirrorGetVendorDataReply extends OFNetmaskVendorData {
 
     protected static Instantiable<OFVendorData> instantiable =
         new Instantiable<OFVendorData>() {
-        public OFVendorData instantiate() {
+        @Override
+		public OFVendorData instantiate() {
             return new OFMirrorGetVendorDataReply();
         }
     };

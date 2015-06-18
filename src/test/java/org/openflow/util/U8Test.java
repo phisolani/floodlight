@@ -17,6 +17,7 @@
 
 package org.openflow.util;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class U8Test extends TestCase {
@@ -26,7 +27,7 @@ public class U8Test extends TestCase {
    */
   public void test() throws Exception {
       short val = 0xff;
-      TestCase.assertEquals(-1, U8.t(val));
-      TestCase.assertEquals(val, U8.f((byte)-1));
+      Assert.assertEquals(-1, U8.t(val));
+      Assert.assertEquals(val, U8.f((byte)-1));
   }
 }

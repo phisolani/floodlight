@@ -38,7 +38,8 @@ public class ChainedResolver<T> implements IInconsistencyResolver<T> {
             this.resolvers.add(resolver);
     }
 
-    public List<T> resolveConflicts(List<T> items) {
+    @Override
+	public List<T> resolveConflicts(List<T> items) {
         for(IInconsistencyResolver<T> resolver: resolvers) {
             if(items.size() <= 1)
                 return items;

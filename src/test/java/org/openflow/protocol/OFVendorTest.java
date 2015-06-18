@@ -19,6 +19,7 @@ package org.openflow.protocol;
 
 import java.util.Arrays;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -182,7 +183,7 @@ public class OFVendorTest extends OFTestCase {
         bb.clear();
         msg.writeTo(bb);
         msg.readFrom(bb);
-        TestCase.assertEquals(1, msg.getVendor());
+        Assert.assertEquals(1, msg.getVendor());
     }
     
     public void testVendorData() throws Exception {

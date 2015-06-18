@@ -17,6 +17,7 @@
 
 package org.openflow.util;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class U32Test extends TestCase {
@@ -26,7 +27,7 @@ public class U32Test extends TestCase {
    */
   public void test() throws Exception {
       long val = 0xffffffffL;
-      TestCase.assertEquals(-1, U32.t(val));
-      TestCase.assertEquals(val, U32.f(-1));
+      Assert.assertEquals(-1, U32.t(val));
+      Assert.assertEquals(val, U32.f(-1));
   }
 }

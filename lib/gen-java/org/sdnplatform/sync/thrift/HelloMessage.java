@@ -12,23 +12,13 @@ import org.apache.thrift.scheme.StandardScheme;
 
 import org.apache.thrift.scheme.TupleScheme;
 import org.apache.thrift.protocol.TTupleProtocol;
-import org.apache.thrift.protocol.TProtocolException;
 import org.apache.thrift.EncodingUtils;
-import org.apache.thrift.TException;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("all") public class HelloMessage implements org.apache.thrift.TBase<HelloMessage, HelloMessage._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("HelloMessage");
@@ -115,11 +105,13 @@ import org.slf4j.LoggerFactory;
       _fieldName = fieldName;
     }
 
-    public short getThriftFieldId() {
+    @Override
+	public short getThriftFieldId() {
       return _thriftId;
     }
 
-    public String getFieldName() {
+    @Override
+	public String getFieldName() {
       return _fieldName;
     }
   }
@@ -170,7 +162,8 @@ import org.slf4j.LoggerFactory;
     }
   }
 
-  public HelloMessage deepCopy() {
+  @Override
+public HelloMessage deepCopy() {
     return new HelloMessage(this);
   }
 
@@ -286,7 +279,8 @@ import org.slf4j.LoggerFactory;
     }
   }
 
-  public void setFieldValue(_Fields field, Object value) {
+  @Override
+public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case HEADER:
       if (value == null) {
@@ -323,7 +317,8 @@ import org.slf4j.LoggerFactory;
     }
   }
 
-  public Object getFieldValue(_Fields field) {
+  @Override
+public Object getFieldValue(_Fields field) {
     switch (field) {
     case HEADER:
       return getHeader();
@@ -342,7 +337,8 @@ import org.slf4j.LoggerFactory;
   }
 
   /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-  public boolean isSet(_Fields field) {
+  @Override
+public boolean isSet(_Fields field) {
     if (field == null) {
       throw new IllegalArgumentException();
     }
@@ -417,13 +413,14 @@ import org.slf4j.LoggerFactory;
     return 0;
   }
 
-  public int compareTo(HelloMessage other) {
+  @Override
+public int compareTo(HelloMessage other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    HelloMessage typedOther = (HelloMessage)other;
+    HelloMessage typedOther = other;
 
     lastComparison = Boolean.valueOf(isSetHeader()).compareTo(typedOther.isSetHeader());
     if (lastComparison != 0) {
@@ -468,15 +465,18 @@ import org.slf4j.LoggerFactory;
     return 0;
   }
 
-  public _Fields fieldForId(int fieldId) {
+  @Override
+public _Fields fieldForId(int fieldId) {
     return _Fields.findByThriftId(fieldId);
   }
 
-  public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+  @Override
+public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
     schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
   }
 
-  public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+  @Override
+public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
     schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
   }
 
@@ -555,14 +555,16 @@ import org.slf4j.LoggerFactory;
   }
 
   private static class HelloMessageStandardSchemeFactory implements SchemeFactory {
-    public HelloMessageStandardScheme getScheme() {
+    @Override
+	public HelloMessageStandardScheme getScheme() {
       return new HelloMessageStandardScheme();
     }
   }
 
   private static class HelloMessageStandardScheme extends StandardScheme<HelloMessage> {
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot, HelloMessage struct) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, HelloMessage struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TField schemeField;
       iprot.readStructBegin();
       while (true)
@@ -617,7 +619,8 @@ import org.slf4j.LoggerFactory;
       struct.validate();
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot, HelloMessage struct) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, HelloMessage struct) throws org.apache.thrift.TException {
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
@@ -652,7 +655,8 @@ import org.slf4j.LoggerFactory;
   }
 
   private static class HelloMessageTupleSchemeFactory implements SchemeFactory {
-    public HelloMessageTupleScheme getScheme() {
+    @Override
+	public HelloMessageTupleScheme getScheme() {
       return new HelloMessageTupleScheme();
     }
   }

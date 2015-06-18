@@ -19,6 +19,7 @@ package org.openflow.protocol;
 
 import java.util.List;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -41,22 +42,22 @@ public class OFErrorTest extends OFTestCase {
         bb.clear();
         msg.writeTo(bb);
         msg.readFrom(bb);
-        TestCase.assertEquals(OFErrorType.OFPET_HELLO_FAILED.getValue(),
+        Assert.assertEquals(OFErrorType.OFPET_HELLO_FAILED.getValue(),
                 msg.getErrorType());
-        TestCase.assertEquals((short) OFHelloFailedCode.OFPHFC_INCOMPATIBLE
+        Assert.assertEquals((short) OFHelloFailedCode.OFPHFC_INCOMPATIBLE
                 .ordinal(), msg.getErrorType());
-        TestCase.assertNull(msg.getOffendingMsg());
+        Assert.assertNull(msg.getOffendingMsg());
 
         msg.setOffendingMsg(new OFHello());
         bb.clear();
         msg.writeTo(bb);
         msg.readFrom(bb);
-        TestCase.assertEquals(OFErrorType.OFPET_HELLO_FAILED.getValue(),
+        Assert.assertEquals(OFErrorType.OFPET_HELLO_FAILED.getValue(),
                 msg.getErrorType());
-        TestCase.assertEquals((short) OFHelloFailedCode.OFPHFC_INCOMPATIBLE
+        Assert.assertEquals((short) OFHelloFailedCode.OFPHFC_INCOMPATIBLE
                 .ordinal(), msg.getErrorType());
-        TestCase.assertNotNull(msg.getOffendingMsg());
-        TestCase.assertEquals(OFHello.MINIMUM_LENGTH,
+        Assert.assertNotNull(msg.getOffendingMsg());
+        Assert.assertEquals(OFHello.MINIMUM_LENGTH,
                 msg.getOffendingMsg().length);
     }
 
@@ -78,11 +79,11 @@ public class OFErrorTest extends OFTestCase {
         ChannelBuffer oferrorBuf = 
                 ChannelBuffers.wrappedBuffer(oferrorRaw);
         List<OFMessage> msg = factory.parseMessage(oferrorBuf);
-        TestCase.assertNotNull(msg);
-        TestCase.assertEquals(msg.size(), 1);
-        TestCase.assertEquals(76, msg.get(0).getLengthU());
+        Assert.assertNotNull(msg);
+        Assert.assertEquals(msg.size(), 1);
+        Assert.assertEquals(76, msg.get(0).getLengthU());
         ChannelBuffer out = ChannelBuffers.dynamicBuffer();
         msg.get(0).writeTo(out);
-        TestCase.assertEquals(76, out.readableBytes());
+        Assert.assertEquals(76, out.readableBytes());
     }
 }

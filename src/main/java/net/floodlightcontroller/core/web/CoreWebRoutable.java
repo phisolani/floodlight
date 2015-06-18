@@ -53,6 +53,9 @@ public class CoreWebRoutable implements RestletRoutable {
         router.attach("/role/json", ControllerRoleResource.class);
         router.attach("/health/json", HealthCheckResource.class);
         router.attach("/system/uptime/json", SystemUptimeResource.class);
+        // @PHISOLANI
+        // Adding new url for configure the controller
+        router.attach("/controller/configure/json", ControllerConfigurationResource.class);
         return router;
     }
 }

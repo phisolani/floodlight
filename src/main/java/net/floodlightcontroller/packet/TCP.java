@@ -151,7 +151,8 @@ public class TCP extends BasePacket {
      *      -checksum : 0
      *      -length : 0
      */
-    public byte[] serialize() {
+    @Override
+	public byte[] serialize() {
         int length;
         if (dataOffset == 0)
             dataOffset = 5;  // default header length

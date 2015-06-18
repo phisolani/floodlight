@@ -6,11 +6,6 @@
  */
 package net.floodlightcontroller.packetstreamer.thrift;
 
-
-import java.util.Map;
-import java.util.HashMap;
-import org.apache.thrift.TEnum;
-
 /**
  * OFMessage type
  * 
@@ -48,7 +43,8 @@ import org.apache.thrift.TEnum;
   /**
    * Get the integer value of this enum value, as defined in the Thrift IDL.
    */
-  public int getValue() {
+  @Override
+public int getValue() {
     return value;
   }
 

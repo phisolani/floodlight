@@ -33,12 +33,14 @@ public class MacVlanPair {
         return vlan.shortValue();
     }
     
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         return (o instanceof MacVlanPair) && (mac.equals(((MacVlanPair) o).mac))
             && (vlan.equals(((MacVlanPair) o).vlan));
     }
     
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return mac.hashCode() ^ vlan.hashCode();
     }
 }

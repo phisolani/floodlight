@@ -40,7 +40,8 @@ public class OFMirrorSetVendorData extends OFBigSwitchVendorData {
      * @param data: the channel buffer from which we are deserializing
      * @param length: the length to the end of the enclosing message
      */
-    public void readFrom(ChannelBuffer data, int length) {
+    @Override
+	public void readFrom(ChannelBuffer data, int length) {
         super.readFrom(data, length);
         reportMirrorPorts = data.readByte();
         pad1 = data.readByte();
@@ -51,7 +52,8 @@ public class OFMirrorSetVendorData extends OFBigSwitchVendorData {
     /**
      * Write the vendor data to the channel buffer
      */
-    public void writeTo(ChannelBuffer data) {
+    @Override
+	public void writeTo(ChannelBuffer data) {
         super.writeTo(data);
         data.writeByte(reportMirrorPorts);
         data.writeByte(pad1);

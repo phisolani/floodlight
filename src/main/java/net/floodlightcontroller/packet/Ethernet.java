@@ -200,7 +200,8 @@ public class Ethernet extends BasePacket {
         return this;
     }
 
-    public byte[] serialize() {
+    @Override
+	public byte[] serialize() {
         byte[] payloadData = null;
         if (payload != null) {
             payload.setParent(this);
@@ -396,7 +397,7 @@ public class Ethernet extends BasePacket {
 
         StringBuffer sb = new StringBuffer("\n");
 
-        IPacket pkt = (IPacket) this.getPayload();
+        IPacket pkt = this.getPayload();
 
         if (pkt instanceof ARP)
             sb.append("arp");

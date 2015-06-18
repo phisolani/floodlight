@@ -19,6 +19,7 @@ package org.openflow.util;
 
 import java.math.BigInteger;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class U64Test extends TestCase {
@@ -28,7 +29,7 @@ public class U64Test extends TestCase {
    */
   public void test() throws Exception {
       BigInteger val = new BigInteger("ffffffffffffffff", 16);
-      TestCase.assertEquals(-1, U64.t(val));
-      TestCase.assertEquals(val, U64.f(-1));
+      Assert.assertEquals(-1, U64.t(val));
+      Assert.assertEquals(val, U64.f(-1));
   }
 }

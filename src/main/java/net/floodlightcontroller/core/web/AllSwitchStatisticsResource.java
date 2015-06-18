@@ -25,6 +25,12 @@ import java.util.Map;
 import java.util.Set;
 
 import net.floodlightcontroller.core.IFloodlightProviderService;
+import net.floodlightcontroller.core.statistics.Counter;
+import net.floodlightcontroller.core.statistics.OStatisticsTemp;
+import net.floodlightcontroller.core.statistics.PerSwitchStatistics;
+import net.floodlightcontroller.core.statistics.StatisticsAggregator;
+
+import org.json.simple.JSONObject;
 import org.openflow.protocol.OFFeaturesReply;
 import org.openflow.protocol.statistics.OFStatistics;
 import org.openflow.protocol.statistics.OFStatisticsType;
@@ -47,7 +53,8 @@ public class AllSwitchStatisticsResource extends SwitchResourceBase {
         return retrieveInternal(statType);
     }
 
-    public Map<String, Object> retrieveInternal(String statType) {
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> retrieveInternal(String statType) {
         HashMap<String, Object> model = new HashMap<String, Object>();
 
         OFStatisticsType type = null;
@@ -100,7 +107,7 @@ public class AllSwitchStatisticsResource extends SwitchResourceBase {
                     if (rType == REQUESTTYPE.OFSTATS) {
                         model.put(HexString.toHexString(curThread.getSwitchId()), curThread.getStatisticsReply());
                     } else if (rType == REQUESTTYPE.OFFEATURES) {
-                        model.put(HexString.toHexString(curThread.getSwitchId()), curThread.getFeaturesReply());
+                        model.put(HexString.toHexString(curThread.getSwitchId()), curThread.getFeaturesReply());                       
                     }
                     pendingRemovalThreads.add(curThread);
                 }
@@ -124,11 +131,45 @@ public class AllSwitchStatisticsResource extends SwitchResourceBase {
             } catch (InterruptedException e) {
                 log.error("Interrupted while waiting for statistics", e);
             }
+        }        
+        
+        //@PHISOLANI
+        //Putting data to JSON
+        model.put("Aggregate Statistics", new OStatisticsTemp(
+        		StatisticsAggregator.getRequestPacketCount().get(), 
+        		StatisticsAggregator.getRequestPacketLength().get(),
+        		StatisticsAggregator.getReplyPacketCount().get(),
+        		StatisticsAggregator.getReplyPacketLength().get(), 
+        		StatisticsAggregator.getAvgResponse(),
+        		StatisticsAggregator.getTimeRequest().get(),
+        		StatisticsAggregator.getTimeReply().get(),
+        		StatisticsAggregator.getPacketInCount().get(),
+        		StatisticsAggregator.getPacketInLength().get(),
+        		StatisticsAggregator.getPacketOutCount().get(),
+        		StatisticsAggregator.getPacketOutLength().get(),
+        		StatisticsAggregator.getFlowModCount().get(),
+        		StatisticsAggregator.getFlowModLength().get()));
+                 
+        JSONObject obj = new JSONObject();
+        for (Long dpid : switchDpids){        	
+        	String dpid_string = HexString.toHexString(dpid);
+        	Counter switch_counters = PerSwitchStatistics.getSwitches_map().get(HexString.toHexString(dpid));
+        	obj.put(dpid_string, switch_counters);         	
         }
-
+        //Map<String, Counter> switches_teste = PerSwitchStatistics.getSwitches_map();
+        //System.out.println(PerSwitchStatistics.getSwitches_map().get("00:00:00:00:00:00:00:03").getCounters_map().get("packet_in_count"));        
+        model.put("Control Channel Statistics", obj);
         return model;
     }
-
+    
+//    public JSONObject formatCounters(Map<String, AtomicLong> counters_map){
+//    	JSONObject subtypes = new JSONObject();
+//    	for (Map.Entry<String, AtomicLong> entry : counters_map.entrySet()){
+//			subtypes.put(entry.getKey(), entry.getValue());
+//		}
+//    	return subtypes;
+//    }
+        
     protected class GetConcurrentStatsThread extends Thread {
         private List<OFStatistics> switchReply;
         private long switchId;

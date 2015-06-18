@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import net.floodlightcontroller.core.IOFSwitch;
 import net.floodlightcontroller.core.module.FloodlightModuleContext;
 import net.floodlightcontroller.core.module.FloodlightModuleException;
@@ -115,7 +116,7 @@ public class CounterStore implements IFloodlightModule, ICounterStoreService {
         pktinCounters = new ConcurrentHashMap<CounterKeyTuple, List<ICounter>>();
     protected ConcurrentHashMap<CounterKeyTuple, List<ICounter>>
         pktoutCounters = new ConcurrentHashMap<CounterKeyTuple, List<ICounter>>();
-
+    
     /**
      * Thread local counter stores
      */
@@ -134,7 +135,7 @@ public class CounterStore implements IFloodlightModule, ICounterStoreService {
             return new HashMap<CounterKeyTuple,MutableInt>();
         }
     };
-
+    
     /**
      * A cache of counterName --> Counter used to retrieve counters quickly via
      * string-counter-keys
@@ -185,7 +186,7 @@ public class CounterStore implements IFloodlightModule, ICounterStoreService {
         currval.increment();
         return;
     }
-
+        
     @Override
     public void updateFlush() {
         Date date = new Date();
@@ -222,6 +223,7 @@ public class CounterStore implements IFloodlightModule, ICounterStoreService {
         }
         // We could do better "GC" of counters that have not been update "recently"
         pktout_buffer.clear();
+        
     }
 
     @Override
@@ -494,7 +496,7 @@ public class CounterStore implements IFloodlightModule, ICounterStoreService {
         return this.pktoutCounters.get(countersKey);
 
     }
-
+    
     /**
      * Create a title based on switch ID, portID, vlanID, counterName, and subCategory
      * If portID is -1, the title represents the given switch only

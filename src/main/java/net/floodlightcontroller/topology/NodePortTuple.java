@@ -66,7 +66,8 @@ public class NodePortTuple implements Comparable<NodePortTuple> {
         this.portId = portId;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return "[id=" + HexString.toHexString(nodeId) + ", port=" + new Short(portId) + "]";
     }
 

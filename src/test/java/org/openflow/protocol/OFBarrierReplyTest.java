@@ -17,6 +17,7 @@
 
 package org.openflow.protocol;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -31,6 +32,6 @@ public class OFBarrierReplyTest extends OFTestCase {
         bb.clear();
         msg.writeTo(bb);
         msg.readFrom(bb);
-        TestCase.assertEquals(OFType.BARRIER_REPLY, msg.getType());
+        Assert.assertEquals(OFType.BARRIER_REPLY, msg.getType());
     }
 }

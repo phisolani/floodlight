@@ -245,7 +245,8 @@ public class LoadMonitor implements Runnable {
         ScheduledFuture<?> monitorTask =
             ses.scheduleAtFixedRate(
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         System.out.println(mon.getLoad());
                     }
                 }, LOADMONITOR_SAMPLING_INTERVAL/2,
@@ -265,7 +266,8 @@ public class LoadMonitor implements Runnable {
         // Run the tasks for 2 minutes
         scheduler.schedule(
             new Runnable() {
-                public void run() {
+                @Override
+				public void run() {
                     monitorTask.cancel(true);
                     printTask.cancel(true);
                 }

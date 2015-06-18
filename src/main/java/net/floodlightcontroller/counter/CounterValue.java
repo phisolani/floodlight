@@ -88,7 +88,8 @@ public class CounterValue {
     return this.type;
   }
   
-  public String toString() {
+  @Override
+public String toString() {
     String ret = "{type: ";
     if (this.type == CounterType.DOUBLE) {
         ret += "Double" + ", value: " + this.doubleValue + "}";

@@ -38,14 +38,17 @@ import org.openflow.protocol.OFPacketOut;
 import org.openflow.protocol.OFPort;
 import org.openflow.protocol.OFType;
 import org.openflow.protocol.action.OFAction;
+import org.openflow.protocol.action.OFActionDataLayer;
 import org.openflow.protocol.action.OFActionDataLayerDestination;
 import org.openflow.protocol.action.OFActionDataLayerSource;
 import org.openflow.protocol.action.OFActionEnqueue;
+import org.openflow.protocol.action.OFActionNetworkLayerAddress;
 import org.openflow.protocol.action.OFActionNetworkLayerDestination;
 import org.openflow.protocol.action.OFActionNetworkLayerSource;
 import org.openflow.protocol.action.OFActionNetworkTypeOfService;
 import org.openflow.protocol.action.OFActionOutput;
 import org.openflow.protocol.action.OFActionStripVirtualLan;
+import org.openflow.protocol.action.OFActionTransportLayer;
 import org.openflow.protocol.action.OFActionTransportLayerDestination;
 import org.openflow.protocol.action.OFActionTransportLayerSource;
 import org.openflow.protocol.action.OFActionVirtualLanIdentifier;
@@ -536,7 +539,7 @@ public class LoadBalancer implements IFloodlightModule,
                fm.setCommand((short) 0);
                fm.setFlags((short) 0);
                fm.setOutPort(OFPort.OFPP_NONE.getValue());
-               fm.setCookie((long) 0);  
+               fm.setCookie(0);  
                fm.setPriority(Short.MAX_VALUE);
                
                if (inBound) {
@@ -922,7 +925,7 @@ public class LoadBalancer implements IFloodlightModule,
         n = Pattern.compile("output=(?:((?:0x)?\\d+)|(all)|(controller)|(local)|(ingress-port)|(normal)|(flood))").matcher(subaction);
         if (n.matches()) {
             OFActionOutput action = new OFActionOutput();
-            action.setMaxLength((short) Short.MAX_VALUE);
+            action.setMaxLength(Short.MAX_VALUE);
             short port = OFPort.OFPP_NONE.getValue();
             if (n.group(1) != null) {
                 try {
@@ -1098,7 +1101,7 @@ public class LoadBalancer implements IFloodlightModule,
 
                 sa = new SubActionStruct();
                 sa.action = action;
-                sa.len = OFActionDataLayerSource.MINIMUM_LENGTH;
+                sa.len = OFActionDataLayer.MINIMUM_LENGTH;
             }
         }
         else {
@@ -1122,7 +1125,7 @@ public class LoadBalancer implements IFloodlightModule,
                 
                 sa = new SubActionStruct();
                 sa.action = action;
-                sa.len = OFActionDataLayerDestination.MINIMUM_LENGTH;
+                sa.len = OFActionDataLayer.MINIMUM_LENGTH;
             }
         }
         else {
@@ -1175,7 +1178,7 @@ public class LoadBalancer implements IFloodlightModule,
 
             sa = new SubActionStruct();
             sa.action = action;
-            sa.len = OFActionNetworkLayerSource.MINIMUM_LENGTH;
+            sa.len = OFActionNetworkLayerAddress.MINIMUM_LENGTH;
         }
         else {
             log.debug("Invalid action: '{}'", subaction);
@@ -1197,7 +1200,7 @@ public class LoadBalancer implements IFloodlightModule,
  
             sa = new SubActionStruct();
             sa.action = action;
-            sa.len = OFActionNetworkLayerDestination.MINIMUM_LENGTH;
+            sa.len = OFActionNetworkLayerAddress.MINIMUM_LENGTH;
         }
         else {
             log.debug("Invalid action: '{}'", subaction);
@@ -1221,7 +1224,7 @@ public class LoadBalancer implements IFloodlightModule,
                     
                     sa = new SubActionStruct();
                     sa.action = action;
-                    sa.len = OFActionTransportLayerSource.MINIMUM_LENGTH;;
+                    sa.len = OFActionTransportLayer.MINIMUM_LENGTH;;
                 }
                 catch (NumberFormatException e) {
                     log.debug("Invalid src-port in: {} (error ignored)", subaction);
@@ -1251,7 +1254,7 @@ public class LoadBalancer implements IFloodlightModule,
                     
                     sa = new SubActionStruct();
                     sa.action = action;
-                    sa.len = OFActionTransportLayerDestination.MINIMUM_LENGTH;;
+                    sa.len = OFActionTransportLayer.MINIMUM_LENGTH;;
                 }
                 catch (NumberFormatException e) {
                     log.debug("Invalid dst-port in: {} (error ignored)", subaction);
@@ -1314,7 +1317,7 @@ public class LoadBalancer implements IFloodlightModule,
     
     // Parse int as decimal, hex (start with 0x or #) or octal (starts with 0)
     private static int get_int(String str) {
-        return (int)Integer.decode(str);
+        return Integer.decode(str);
     }
    
     // Parse short as decimal, hex (start with 0x or #) or octal (starts with 0)

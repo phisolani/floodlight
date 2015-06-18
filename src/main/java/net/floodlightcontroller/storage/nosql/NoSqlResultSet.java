@@ -464,7 +464,8 @@ public class NoSqlResultSet implements IResultSet {
     }
 
     
-    public void setNull(String columnName)
+    @Override
+	public void setNull(String columnName)
     {
         addRowUpdate(columnName, null);
     }
@@ -472,7 +473,7 @@ public class NoSqlResultSet implements IResultSet {
     
     @Override
     public void deleteRow() {
-        Object key = (String) rowList.get(currentIndex).get(primaryKeyName);
+        Object key = rowList.get(currentIndex).get(primaryKeyName);
         if (rowDeleteSet == null)
             rowDeleteSet = new HashSet<Object>();
         rowDeleteSet.add(key);

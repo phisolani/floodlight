@@ -32,6 +32,7 @@ import net.floodlightcontroller.core.IOFSwitch;
 import net.floodlightcontroller.core.annotations.LogMessageCategory;
 import net.floodlightcontroller.core.annotations.LogMessageDoc;
 import net.floodlightcontroller.core.annotations.LogMessageDocs;
+import net.floodlightcontroller.core.statistics.ChangeIdleTimeConfig;
 import net.floodlightcontroller.core.util.AppCookie;
 import net.floodlightcontroller.counter.ICounterStoreService;
 import net.floodlightcontroller.devicemanager.IDeviceService;
@@ -65,14 +66,18 @@ import org.slf4j.LoggerFactory;
 @LogMessageCategory("Flow Programming")
 public abstract class ForwardingBase
     implements IOFMessageListener {
-
+	// @PHISOLANI
+	static ChangeIdleTimeConfig idleConfiguration = new ChangeIdleTimeConfig();	
+	
     protected static Logger log =
             LoggerFactory.getLogger(ForwardingBase.class);
 
     protected static int OFMESSAGE_DAMPER_CAPACITY = 10000; // TODO: find sweet spot
     protected static int OFMESSAGE_DAMPER_TIMEOUT = 250; // ms
 
-    public static short FLOWMOD_DEFAULT_IDLE_TIMEOUT = 5; // in seconds
+    // @PHISOLANI
+    // public static short FLOWMOD_DEFAULT_IDLE_TIMEOUT = 5; // in seconds
+    public static short FLOWMOD_DEFAULT_IDLE_TIMEOUT = idleConfiguration.getXMLIdleTime();
     public static short FLOWMOD_DEFAULT_HARD_TIMEOUT = 0; // infinite
 
     public static final short FLOWMOD_DEFAULT_IDLE_TIMEOUT_CONSTANT = 5;
@@ -611,5 +616,5 @@ public abstract class ForwardingBase
     public boolean isCallbackOrderingPostreq(OFType type, String name) {
         return false;
     }
-
+    
 }

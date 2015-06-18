@@ -26,6 +26,11 @@ import net.floodlightcontroller.core.module.IFloodlightService;
 import net.floodlightcontroller.counter.CounterStore.NetworkLayer;
 import net.floodlightcontroller.packet.Ethernet;
 
+
+/**
+Modified by *Pedro Heleno Isolani to count Read-State messages 
+and length for all messages
+**/
 public interface ICounterStoreService extends IFloodlightService {
 
 	public final static String CONTROLLER_NAME = "controller";
@@ -55,7 +60,6 @@ public interface ICounterStoreService extends IFloodlightService {
      * @param ofMsg
      */
     public void updatePktOutFMCounterStoreLocal(IOFSwitch sw, OFMessage ofMsg);
-
     /**
      * Flush Local Counter Updates
      *

@@ -21,6 +21,7 @@ package org.openflow.protocol;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -42,21 +43,21 @@ public class OFFeaturesReplyTest extends OFTestCase {
         bb.clear();
         ofr.writeTo(bb);
         ofr.readFrom(bb);
-        TestCase.assertEquals(1, ofr.getPorts().size());
-        TestCase.assertEquals("eth0", ofr.getPorts().get(0).getName());
+        Assert.assertEquals(1, ofr.getPorts().size());
+        Assert.assertEquals("eth0", ofr.getPorts().get(0).getName());
 
         // test a 15 character name
         ofr.getPorts().get(0).setName("012345678901234");
         bb.clear();
         ofr.writeTo(bb);
         ofr.readFrom(bb);
-        TestCase.assertEquals("012345678901234", ofr.getPorts().get(0).getName());
+        Assert.assertEquals("012345678901234", ofr.getPorts().get(0).getName());
 
         // test a 16 character name getting truncated
         ofr.getPorts().get(0).setName("0123456789012345");
         bb.clear();
         ofr.writeTo(bb);
         ofr.readFrom(bb);
-        TestCase.assertEquals("012345678901234", ofr.getPorts().get(0).getName());
+        Assert.assertEquals("012345678901234", ofr.getPorts().get(0).getName());
     }
 }

@@ -17,6 +17,7 @@
 
 package org.openflow.protocol;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -31,6 +32,6 @@ public class OFGetConfigRequestTest extends OFTestCase {
         bb.clear();
         msg.writeTo(bb);
         msg.readFrom(bb);
-        TestCase.assertEquals(OFType.GET_CONFIG_REQUEST, msg.getType());
+        Assert.assertEquals(OFType.GET_CONFIG_REQUEST, msg.getType());
     }
 }

@@ -20,7 +20,7 @@ package net.floodlightcontroller.core;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Arrays;	
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -40,8 +40,12 @@ import net.floodlightcontroller.core.annotations.LogMessageDocs;
 import net.floodlightcontroller.core.internal.Controller;
 import net.floodlightcontroller.core.internal.OFFeaturesReplyFuture;
 import net.floodlightcontroller.core.internal.OFStatisticsFuture;
+import net.floodlightcontroller.core.statistics.Counter;
+import net.floodlightcontroller.core.statistics.PerSwitchStatistics;
+import net.floodlightcontroller.core.statistics.StatisticsAggregator;
 import net.floodlightcontroller.core.util.AppCookie;
 import net.floodlightcontroller.core.web.serializers.DPIDSerializer;
+import net.floodlightcontroller.counter.ICounterStoreService;
 import net.floodlightcontroller.debugcounter.IDebugCounter;
 import net.floodlightcontroller.debugcounter.IDebugCounterService;
 import net.floodlightcontroller.debugcounter.IDebugCounterService.CounterException;
@@ -67,6 +71,7 @@ import org.openflow.protocol.OFFlowMod;
 import org.openflow.protocol.OFMatch;
 import org.openflow.protocol.OFMessage;
 import org.openflow.protocol.OFPacketIn;
+import org.openflow.protocol.OFPacketOut;
 import org.openflow.protocol.OFPortStatus;
 import org.openflow.protocol.OFPortStatus.OFPortReason;
 import org.openflow.protocol.OFPort;
@@ -104,12 +109,14 @@ public abstract class OFSwitchBase implements IOFSwitch {
     protected byte tables;
     protected long datapathId;
     protected String stringId;
-
+    
     protected short accessFlowPriority;
     protected short coreFlowPriority;
 
     private boolean startDriverHandshakeCalled = false;
     protected Channel channel;
+    
+    protected ICounterStoreService counterStore;
 
     /**
      * Members hidden from subclasses
@@ -817,15 +824,97 @@ public abstract class OFSwitchBase implements IOFSwitch {
     }
 
     /**
-     * Not callable by writers, but allow IOFSwitch implementation to override
-     * @param msglist
-     * @throws IOException
-     */
-    protected void write(List<OFMessage> msglist) {
-        if (channel == null || !isConnected())
-            return;
-        this.channel.write(msglist);
-    }
+	 * Not callable by writers, but allow IOFSwitch implementation to override
+	 * 
+	 * @param msglist
+	 * @throws IOException
+	 */
+	protected void write(List<OFMessage> msglist) {
+		if (channel == null || !isConnected())
+			return;
+		this.channel.write(msglist);
+		/**
+		 * @author PHISOLANI
+		 * @param msglist = list of messages
+		 * @param channel.stringId = Switch DPID
+		 * @TODO: Count all messages types
+		 */		
+		// @PHI
+		Map<String, Counter> switches_map = PerSwitchStatistics.getSwitches_map();		
+		for (OFMessage msg : msglist) {
+			//System.out.println("Message type: " + msg.getType().toString() + " -> " + this.stringId);
+			switch (msg.getType().toString()) {
+			case "STATS_REQUEST":
+				//System.out.println("Write STATS_REQUEST -> " + this.stringId);
+				StatisticsAggregator.addStatsRequestMessage(msg,
+						this.stringId, this.transactionIdSource);
+				// Count all packets in Control Statistics
+				if (PerSwitchStatistics.createSwitchCounterIfNotExists(this.stringId)) {
+					switches_map.get(this.stringId)
+							.addReadStateRequestMessage(msg.getLength());
+				}
+				break;
+			case "VENDOR":
+				// System.out.println("Write VENDOR -> " + this.stringId);
+				if (PerSwitchStatistics.createSwitchCounterIfNotExists(this.stringId)) {
+					switches_map.get(this.stringId)
+							.addVendorRequestMessage(msg.getLength());
+				}
+				break;
+			case "FLOW_MOD":
+				//System.out.println("Write FLOW_MOD -> " + this.stringId);
+				StatisticsAggregator.addFlowModMessage(msg,
+						this.stringId, this.transactionIdSource);
+				// Count all packets in Control Statistics
+				if (PerSwitchStatistics.createSwitchCounterIfNotExists(this.stringId)) {
+					switches_map.get(this.stringId).addModifyStateMessage(
+							msg.getLength());
+				}
+				break;
+			case "PACKET_OUT":
+				//System.out.println("Write PACKET OUT -> " + this.stringId);
+				// Count all packets in Control Statistics
+				if (PerSwitchStatistics.createSwitchCounterIfNotExists(this.stringId)) {
+					switches_map.get(this.stringId).addSendPacketMessage(
+							msg.getLength());
+				}
+				// Count all packet-out except LLDP/BDDPs				
+				byte[] data = ((OFPacketOut) msg).getPacketData();
+				if ((data.length > 14)
+						&& (((data[12] == (byte) 0x88) && (data[13] == (byte) 0xcc)) || ((data[12] == (byte) 0x89) && (data[13] == (byte) 0x42)))) {
+					// This packet is LLDP					
+				} else {
+					// This packet is not LLDP
+					// TODO: Count this packet please
+					//System.out.println("Write PACKET_OUT -> " + this.stringId);
+					StatisticsAggregator.addPacketOutMessage(msg,
+							this.stringId, this.transactionIdSource);
+				}
+				break;
+			case "FEATURES_REQUEST":
+				// Count all packets in Control Statistics
+				if (PerSwitchStatistics.createSwitchCounterIfNotExists(this.stringId)) {
+					switches_map.get(this.stringId).addFeaturesRequestMessage(
+							msg.getLength());
+				}
+				break;
+			case "CONFIG_REQUEST":
+				// Count all packets in Control Statistics
+				if (PerSwitchStatistics.createSwitchCounterIfNotExists(this.stringId)) {
+					switches_map.get(this.stringId).addFeaturesRequestMessage(
+							msg.getLength());
+				}
+				break;
+			case "HELLO":
+				// Count all packets in Control Statistics
+				System.out.println("adcasd");
+				break;
+			default:
+				System.out.println("Message type: " + msg.getType().toString() + " -> " + this.stringId);
+			}
+		}
+		//System.out.println("------------------------------------------");
+	}
 
     @Override
     public void disconnectOutputStream() {
@@ -981,6 +1070,12 @@ public abstract class OFSwitchBase implements IOFSwitch {
 
     @Override
     public void deliverStatisticsReply(OFStatisticsReply reply) {
+    	//@PHISOLANI
+    	//System.out.println("deliverStatisticsReply " + reply);
+    	StatisticsAggregator.addStatsReplyMessage(reply,
+    			this.stringId, 
+    			this.transactionIdSource);
+    	
         checkForTableStats(reply);
         OFStatisticsFuture future = this.statsFutureMap.get(reply.getXid());
         if (future != null) {
@@ -1132,6 +1227,13 @@ public abstract class OFSwitchBase implements IOFSwitch {
         fm.setXid(getNextTransactionId());
         OFMessage barrierMsg = floodlightProvider.getOFMessageFactory().getMessage(
                 OFType.BARRIER_REQUEST);
+        //PHISOLANI
+        //Count barrier request messages
+        if (PerSwitchStatistics.createSwitchCounterIfNotExists(this.stringId)) {
+        	PerSwitchStatistics.getSwitches_map().get(this.stringId)
+					.addBarrierRequestMessage(barrierMsg.getLength());
+		}
+        //System.out.println("Barrier Request -> ClearAllFlowMods " + barrierMsg);
         barrierMsg.setXid(getNextTransactionId());
         List<OFMessage> msglist = new ArrayList<OFMessage>(2);
         msglist.add(fm);
@@ -1231,6 +1333,8 @@ public abstract class OFSwitchBase implements IOFSwitch {
 
     @Override
     public void deliverOFFeaturesReply(OFMessage reply) {
+    	//@PHISOLANI
+    	//System.out.println("deliverOFFeaturesReply " + reply.getType());
         OFFeaturesReplyFuture future = this.featuresFutureMap.get(reply.getXid());
         if (future != null) {
             future.deliverFuture(this, reply);

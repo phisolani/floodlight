@@ -20,6 +20,7 @@ package org.openflow.util;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class UnsignedTest extends TestCase {
@@ -38,10 +39,10 @@ public class UnsignedTest extends TestCase {
     BigInteger bi = Unsigned.getUnsignedLong(bb);
     BigInteger uLongMax = new BigInteger(ULONG_MAX);
     for (int i = 0; i < uLongMax.bitCount(); ++i) {
-        TestCase.assertTrue("Bit: " + i + " should be: " + uLongMax.testBit(i),
+        Assert.assertTrue("Bit: " + i + " should be: " + uLongMax.testBit(i),
                 uLongMax.testBit(i) == bi.testBit(i));
     }
-    TestCase.assertEquals(ULONG_MAX, bi.toString());
+    Assert.assertEquals(ULONG_MAX, bi.toString());
 
     bb = ByteBuffer.allocate(10);
     bb.put((byte)0x00);
@@ -53,10 +54,10 @@ public class UnsignedTest extends TestCase {
     bi = Unsigned.getUnsignedLong(bb, 1);
     uLongMax = new BigInteger(ULONG_MAX);
     for (int i = 0; i < uLongMax.bitCount(); ++i) {
-        TestCase.assertTrue("Bit: " + i + " should be: " + uLongMax.testBit(i),
+        Assert.assertTrue("Bit: " + i + " should be: " + uLongMax.testBit(i),
                 uLongMax.testBit(i) == bi.testBit(i));
     }
-    TestCase.assertEquals(ULONG_MAX, bi.toString());
+    Assert.assertEquals(ULONG_MAX, bi.toString());
   }
 
   /**
@@ -68,7 +69,7 @@ public class UnsignedTest extends TestCase {
     BigInteger uLongMax = new BigInteger(ULONG_MAX);
     Unsigned.putUnsignedLong(bb, uLongMax);
     for (int i = 0; i < 8; ++i) {
-        TestCase.assertTrue("Byte: " + i + " should be 0xff, was: " + bb.get(i),
+        Assert.assertTrue("Byte: " + i + " should be 0xff, was: " + bb.get(i),
                 (bb.get(i) & (short)0xff) == 0xff);
     }
 
@@ -76,7 +77,7 @@ public class UnsignedTest extends TestCase {
     Unsigned.putUnsignedLong(bb, uLongMax, 1);
     int offset = 1;
     for (int i = 0; i < 8; ++i) {
-        TestCase.assertTrue("Byte: " + i + " should be 0xff, was: " +
+        Assert.assertTrue("Byte: " + i + " should be 0xff, was: " +
                 bb.get(offset+i), (bb.get(offset+i) & (short)0xff) == 0xff);
     }
   }
