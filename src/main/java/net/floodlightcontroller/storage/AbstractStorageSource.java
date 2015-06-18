@@ -86,7 +86,8 @@ public abstract class AbstractStorageSource
             explanation=DB_ERROR_EXPLANATION,
             recommendation=LogMessageDoc.GENERIC_ACTION)
     abstract class StorageCallable<V> implements Callable<V> {
-        public V call() {
+        @Override
+		public V call() {
             try {
                 return doStorageOperation();
             }
@@ -105,7 +106,8 @@ public abstract class AbstractStorageSource
             explanation=DB_ERROR_EXPLANATION,
             recommendation=LogMessageDoc.GENERIC_ACTION)
     abstract class StorageRunnable implements Runnable {
-        public void run() {
+        @Override
+		public void run() {
             try {
                 doStorageOperation();
             }
@@ -155,7 +157,7 @@ public abstract class AbstractStorageSource
             String counterName;
             if (tableName != null) {
                 updateCounters(baseName, null);
-                counterName = baseName + CounterStore.TitleDelimitor + tableName;
+                counterName = baseName + ICounterStoreService.TitleDelimitor + tableName;
             } else {
                 counterName = baseName;
             }
@@ -203,7 +205,8 @@ public abstract class AbstractStorageSource
     public Future<IResultSet> executeQueryAsync(final IQuery query) {
         Future<IResultSet> future = executorService.submit(
             new StorageCallable<IResultSet>() {
-                public IResultSet doStorageOperation() {
+                @Override
+				public IResultSet doStorageOperation() {
                     return executeQuery(query);
                 }
             });
@@ -216,7 +219,8 @@ public abstract class AbstractStorageSource
             final RowOrdering ordering) {
         Future<IResultSet> future = executorService.submit(
             new StorageCallable<IResultSet>() {
-                public IResultSet doStorageOperation() {
+                @Override
+				public IResultSet doStorageOperation() {
                     return executeQuery(tableName, columnNames,
                             predicate, ordering);
                 }
@@ -230,7 +234,8 @@ public abstract class AbstractStorageSource
             final RowOrdering ordering, final IRowMapper rowMapper) {
         Future<Object[]> future = executorService.submit(
             new StorageCallable<Object[]>() {
-                public Object[] doStorageOperation() {
+                @Override
+				public Object[] doStorageOperation() {
                     return executeQuery(tableName, columnNames, predicate,
                             ordering, rowMapper);
                 }
@@ -243,7 +248,8 @@ public abstract class AbstractStorageSource
             final Map<String,Object> values) {
         Future<?> future = executorService.submit(
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     insertRow(tableName, values);
                 }
             }, null);
@@ -254,7 +260,8 @@ public abstract class AbstractStorageSource
     public Future<?> updateRowsAsync(final String tableName, final List<Map<String,Object>> rows) {
         Future<?> future = executorService.submit(    
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     updateRows(tableName, rows);
                 }
             }, null);
@@ -266,7 +273,8 @@ public abstract class AbstractStorageSource
             final IPredicate predicate, final Map<String,Object> values) {
         Future<?> future = executorService.submit(    
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     updateMatchingRows(tableName, predicate, values);
                 }
             }, null);
@@ -278,7 +286,8 @@ public abstract class AbstractStorageSource
             final Object rowKey, final Map<String,Object> values) {
         Future<?> future = executorService.submit(
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     updateRow(tableName, rowKey, values);
                 }
             }, null);
@@ -290,7 +299,8 @@ public abstract class AbstractStorageSource
             final Map<String,Object> values) {
         Future<?> future = executorService.submit(
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     updateRow(tableName, values);
                 }
             }, null);
@@ -301,7 +311,8 @@ public abstract class AbstractStorageSource
     public Future<?> deleteRowAsync(final String tableName, final Object rowKey) {
         Future<?> future = executorService.submit(
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     deleteRow(tableName, rowKey);
                 }
             }, null);
@@ -312,7 +323,8 @@ public abstract class AbstractStorageSource
     public Future<?> deleteRowsAsync(final String tableName, final Set<Object> rowKeys) {
         Future<?> future = executorService.submit(
                 new StorageRunnable() {
-                    public void doStorageOperation() {
+                    @Override
+					public void doStorageOperation() {
                         deleteRows(tableName, rowKeys);
                     }
                 }, null);
@@ -323,7 +335,8 @@ public abstract class AbstractStorageSource
     public Future<?> deleteMatchingRowsAsync(final String tableName, final IPredicate predicate) {
         Future<?> future = executorService.submit(
                 new StorageRunnable() {
-                    public void doStorageOperation() {
+                    @Override
+					public void doStorageOperation() {
                         deleteMatchingRows(tableName, predicate);
                     }
                 }, null);
@@ -334,7 +347,8 @@ public abstract class AbstractStorageSource
     public Future<?> getRowAsync(final String tableName, final Object rowKey) {
         Future<?> future = executorService.submit(
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     getRow(tableName, rowKey);
                 }
             }, null);
@@ -345,7 +359,8 @@ public abstract class AbstractStorageSource
     public Future<?> saveAsync(final IResultSet resultSet) {
         Future<?> future = executorService.submit(
             new StorageRunnable() {
-                public void doStorageOperation() {
+                @Override
+				public void doStorageOperation() {
                     resultSet.save();
                 }
             }, null);

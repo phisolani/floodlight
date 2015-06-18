@@ -89,7 +89,8 @@ public class Cluster {
         return (this.id == other.id);
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return "[Cluster id=" + HexString.toHexString(id) + ", " + links.keySet() + "]";
     }
 }

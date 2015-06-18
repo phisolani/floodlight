@@ -85,7 +85,8 @@ public class OFQueueVendorData extends OFOpenFlowVendorData {
      * @param data the channel buffer from which we're deserializing
      * @param length the length to the end of the enclosing message
      */
-    public void readFrom(ChannelBuffer data, int length) {
+    @Override
+	public void readFrom(ChannelBuffer data, int length) {
         super.readFrom(data, length);
         portNumber = data.readShort();
         data.readInt();   // pad
@@ -106,7 +107,8 @@ public class OFQueueVendorData extends OFOpenFlowVendorData {
      * Write the queue message data to the ChannelBuffer
      * @param data the channel buffer to which we're serializing
      */
-    public void writeTo(ChannelBuffer data) {
+    @Override
+	public void writeTo(ChannelBuffer data) {
         super.writeTo(data);
         data.writeShort(this.portNumber);
         data.writeInt(0);   // pad

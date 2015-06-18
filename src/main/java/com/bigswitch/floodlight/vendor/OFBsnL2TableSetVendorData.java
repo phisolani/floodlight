@@ -7,7 +7,8 @@ public class OFBsnL2TableSetVendorData extends OFBsnL2TableVendorData {
 
     protected static Instantiable<OFVendorData> instantiableSingleton = 
         new Instantiable<OFVendorData>() {
-            public OFVendorData instantiate() {
+            @Override
+			public OFVendorData instantiate() {
                 return new OFBsnL2TableSetVendorData();
             }
         };

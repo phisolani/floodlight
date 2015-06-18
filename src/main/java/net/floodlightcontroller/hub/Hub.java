@@ -64,7 +64,8 @@ public class Hub implements IFloodlightModule, IOFMessageListener {
         return Hub.class.getPackage().getName();
     }
 
-    public Command receive(IOFSwitch sw, OFMessage msg, FloodlightContext cntx) {
+    @Override
+	public Command receive(IOFSwitch sw, OFMessage msg, FloodlightContext cntx) {
         OFPacketIn pi = (OFPacketIn) msg;
         OFPacketOut po = (OFPacketOut) floodlightProvider.getOFMessageFactory()
                 .getMessage(OFType.PACKET_OUT);
@@ -73,7 +74,7 @@ public class Hub implements IFloodlightModule, IOFMessageListener {
 
         // set actions
         OFActionOutput action = new OFActionOutput()
-            .setPort((short) OFPort.OFPP_FLOOD.getValue());
+            .setPort(OFPort.OFPP_FLOOD.getValue());
         po.setActions(Collections.singletonList((OFAction)action));
         po.setActionsLength((short) OFActionOutput.MINIMUM_LENGTH);
 

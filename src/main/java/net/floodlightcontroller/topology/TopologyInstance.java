@@ -157,7 +157,8 @@ public class TopologyInstance {
                     .maximumSize(1000L)
                     .build(
                             new CacheLoader<RouteId, Route>() {
-                                public Route load(RouteId rid) {
+                                @Override
+								public Route load(RouteId rid) {
                                     return pathCacheLoader.load(rid);
                                 }
                             });

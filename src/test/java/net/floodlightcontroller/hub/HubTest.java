@@ -59,7 +59,8 @@ public class HubTest extends FloodlightTestCase {
     private   MockFloodlightProvider mockFloodlightProvider;
     private Hub hub;
     
-    @Before
+    @Override
+	@Before
     public void setUp() throws Exception {
         super.setUp();
 

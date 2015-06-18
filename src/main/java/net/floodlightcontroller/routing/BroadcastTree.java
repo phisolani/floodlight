@@ -53,7 +53,8 @@ public class BroadcastTree {
         links.put(myNode, link);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer sb = new StringBuffer();
         for(long n: links.keySet()) {
             sb.append("[" + HexString.toHexString(n) + ": cost=" + costs.get(n) + ", " + links.get(n) + "]");

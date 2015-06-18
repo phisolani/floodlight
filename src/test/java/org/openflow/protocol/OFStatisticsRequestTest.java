@@ -19,6 +19,7 @@ package org.openflow.protocol;
 
 import java.util.List;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -43,13 +44,13 @@ public class OFStatisticsRequestTest extends OFTestCase {
         OFMessageFactory factory = BasicFactory.getInstance();
         ChannelBuffer packetBuf = ChannelBuffers.wrappedBuffer(packet);
         List<OFMessage> msg = factory.parseMessage(packetBuf);
-        TestCase.assertNotNull(msg);
-        TestCase.assertEquals(msg.size(), 1);
-        TestCase.assertTrue(msg.get(0) instanceof OFStatisticsRequest);
+        Assert.assertNotNull(msg);
+        Assert.assertEquals(msg.size(), 1);
+        Assert.assertTrue(msg.get(0) instanceof OFStatisticsRequest);
         OFStatisticsRequest sr = (OFStatisticsRequest) msg.get(0);
-        TestCase.assertEquals(OFStatisticsType.FLOW, sr.getStatisticType());
-        TestCase.assertEquals(1, sr.getStatistics().size());
-        TestCase.assertTrue(sr.getStatistics().get(0) instanceof OFFlowStatisticsRequest);
+        Assert.assertEquals(OFStatisticsType.FLOW, sr.getStatisticType());
+        Assert.assertEquals(1, sr.getStatistics().size());
+        Assert.assertTrue(sr.getStatistics().get(0) instanceof OFFlowStatisticsRequest);
     }
 
     public void testOFStatisticsRequestVendor() throws Exception {
@@ -67,13 +68,13 @@ public class OFStatisticsRequestTest extends OFTestCase {
         OFMessageFactory factory = BasicFactory.getInstance();
         ChannelBuffer packetBuf = ChannelBuffers.wrappedBuffer(packet);
         List<OFMessage> msg = factory.parseMessage(packetBuf);
-        TestCase.assertNotNull(msg);
-        TestCase.assertEquals(msg.size(), 1);
-        TestCase.assertTrue(msg.get(0) instanceof OFStatisticsRequest);
+        Assert.assertNotNull(msg);
+        Assert.assertEquals(msg.size(), 1);
+        Assert.assertTrue(msg.get(0) instanceof OFStatisticsRequest);
         OFStatisticsRequest sr = (OFStatisticsRequest) msg.get(0);
-        TestCase.assertEquals(OFStatisticsType.VENDOR, sr.getStatisticType());
-        TestCase.assertEquals(1, sr.getStatistics().size());
-        TestCase.assertTrue(sr.getStatistics().get(0) instanceof OFVendorStatistics);
-        TestCase.assertEquals(68, ((OFVendorStatistics)sr.getStatistics().get(0)).getLength());
+        Assert.assertEquals(OFStatisticsType.VENDOR, sr.getStatisticType());
+        Assert.assertEquals(1, sr.getStatistics().size());
+        Assert.assertTrue(sr.getStatistics().get(0) instanceof OFVendorStatistics);
+        Assert.assertEquals(68, ((OFVendorStatistics)sr.getStatistics().get(0)).getLength());
     }
 }

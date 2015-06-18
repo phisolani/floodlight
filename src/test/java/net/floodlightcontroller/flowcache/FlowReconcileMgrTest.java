@@ -52,7 +52,8 @@ public class FlowReconcileMgrTest extends FloodlightTestCase {
     protected int NUM_FLOWS_PER_THREAD = 100;
     protected int NUM_THREADS = 20;
     
-    @Before
+    @Override
+	@Before
     public void setUp() throws Exception {
         super.setUp();
 
@@ -154,7 +155,8 @@ public class FlowReconcileMgrTest extends FloodlightTestCase {
         .andReturn(Command.STOP).times(1);
         expect(r2.reconcileFlows((ArrayList<OFMatchReconcile>)anyObject()));
         expectLastCall().andAnswer(new IAnswer<Object>() {
-            public Object answer() {
+            @Override
+			public Object answer() {
                 fail("Unexpected call");
                 return Command.STOP;
             }
@@ -181,7 +183,8 @@ public class FlowReconcileMgrTest extends FloodlightTestCase {
         .andReturn(Command.STOP).times(1);
         expect(r3.reconcileFlows((ArrayList<OFMatchReconcile>)anyObject()));
         expectLastCall().andAnswer(new IAnswer<Object>() {
-            public Object answer() {
+            @Override
+			public Object answer() {
                 fail("Unexpected call");
                 return Command.STOP;
             }
@@ -229,7 +232,8 @@ public class FlowReconcileMgrTest extends FloodlightTestCase {
         reset(r1, r2, r3);
         expect(r1.reconcileFlows((ArrayList<OFMatchReconcile>)anyObject()));
         expectLastCall().andAnswer(new IAnswer<Object>() {
-            public Object answer() {
+            @Override
+			public Object answer() {
                 fail("Unexpected call to a listener that is " +
                         "removed from the chain.");
                 return Command.STOP;

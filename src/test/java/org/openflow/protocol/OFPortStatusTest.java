@@ -17,6 +17,7 @@
 
 package org.openflow.protocol;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -36,9 +37,9 @@ public class OFPortStatusTest extends OFTestCase {
         bb.clear();
         msg.writeTo(bb);
         msg.readFrom(bb);
-        TestCase.assertEquals(OFType.PORT_STATUS, msg.getType());
-        TestCase.assertEquals((byte) OFPortReason.OFPPR_ADD.ordinal(), msg
+        Assert.assertEquals(OFType.PORT_STATUS, msg.getType());
+        Assert.assertEquals((byte) OFPortReason.OFPPR_ADD.ordinal(), msg
                 .getReason());
-        TestCase.assertNotNull(msg.getDesc());
+        Assert.assertNotNull(msg.getDesc());
     }
 }

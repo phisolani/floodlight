@@ -12,21 +12,16 @@ import org.apache.thrift.scheme.StandardScheme;
 
 import org.apache.thrift.scheme.TupleScheme;
 import org.apache.thrift.protocol.TTupleProtocol;
-import org.apache.thrift.protocol.TProtocolException;
 import org.apache.thrift.EncodingUtils;
-import org.apache.thrift.TException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumMap;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.EnumSet;
 import java.util.Collections;
 import java.util.BitSet;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,10 +79,12 @@ import org.slf4j.LoggerFactory;
   public static class Client extends org.apache.thrift.TServiceClient implements Iface {
     public static class Factory implements org.apache.thrift.TServiceClientFactory<Client> {
       public Factory() {}
-      public Client getClient(org.apache.thrift.protocol.TProtocol prot) {
+      @Override
+	public Client getClient(org.apache.thrift.protocol.TProtocol prot) {
         return new Client(prot);
       }
-      public Client getClient(org.apache.thrift.protocol.TProtocol iprot, org.apache.thrift.protocol.TProtocol oprot) {
+      @Override
+	public Client getClient(org.apache.thrift.protocol.TProtocol iprot, org.apache.thrift.protocol.TProtocol oprot) {
         return new Client(iprot, oprot);
       }
     }
@@ -101,7 +98,8 @@ import org.slf4j.LoggerFactory;
       super(iprot, oprot);
     }
 
-    public List<ByteBuffer> getPackets(String sessionid) throws org.apache.thrift.TException
+    @Override
+	public List<ByteBuffer> getPackets(String sessionid) throws org.apache.thrift.TException
     {
       send_getPackets(sessionid);
       return recv_getPackets();
@@ -124,7 +122,8 @@ import org.slf4j.LoggerFactory;
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getPackets failed: unknown result");
     }
 
-    public int pushMessageSync(Message packet) throws org.apache.thrift.TException
+    @Override
+	public int pushMessageSync(Message packet) throws org.apache.thrift.TException
     {
       send_pushMessageSync(packet);
       return recv_pushMessageSync();
@@ -147,7 +146,8 @@ import org.slf4j.LoggerFactory;
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "pushMessageSync failed: unknown result");
     }
 
-    public void pushMessageAsync(Message packet) throws org.apache.thrift.TException
+    @Override
+	public void pushMessageAsync(Message packet) throws org.apache.thrift.TException
     {
       send_pushMessageAsync(packet);
     }
@@ -159,7 +159,8 @@ import org.slf4j.LoggerFactory;
       sendBase("pushMessageAsync", args);
     }
 
-    public void terminateSession(String sessionid) throws org.apache.thrift.TException
+    @Override
+	public void terminateSession(String sessionid) throws org.apache.thrift.TException
     {
       send_terminateSession(sessionid);
       recv_terminateSession();
@@ -188,7 +189,8 @@ import org.slf4j.LoggerFactory;
         this.clientManager = clientManager;
         this.protocolFactory = protocolFactory;
       }
-      public AsyncClient getAsyncClient(org.apache.thrift.transport.TNonblockingTransport transport) {
+      @Override
+	public AsyncClient getAsyncClient(org.apache.thrift.transport.TNonblockingTransport transport) {
         return new AsyncClient(protocolFactory, clientManager, transport);
       }
     }
@@ -197,7 +199,8 @@ import org.slf4j.LoggerFactory;
       super(protocolFactory, clientManager, transport);
     }
 
-    public void getPackets(String sessionid, org.apache.thrift.async.AsyncMethodCallback<getPackets_call> resultHandler) throws org.apache.thrift.TException {
+    @Override
+	public void getPackets(String sessionid, org.apache.thrift.async.AsyncMethodCallback<getPackets_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       getPackets_call method_call = new getPackets_call(sessionid, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
@@ -211,7 +214,8 @@ import org.slf4j.LoggerFactory;
         this.sessionid = sessionid;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+      @Override
+	public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getPackets", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getPackets_args args = new getPackets_args();
         args.setSessionid(sessionid);
@@ -229,7 +233,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void pushMessageSync(Message packet, org.apache.thrift.async.AsyncMethodCallback<pushMessageSync_call> resultHandler) throws org.apache.thrift.TException {
+    @Override
+	public void pushMessageSync(Message packet, org.apache.thrift.async.AsyncMethodCallback<pushMessageSync_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       pushMessageSync_call method_call = new pushMessageSync_call(packet, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
@@ -243,7 +248,8 @@ import org.slf4j.LoggerFactory;
         this.packet = packet;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+      @Override
+	public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("pushMessageSync", org.apache.thrift.protocol.TMessageType.CALL, 0));
         pushMessageSync_args args = new pushMessageSync_args();
         args.setPacket(packet);
@@ -261,7 +267,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void pushMessageAsync(Message packet, org.apache.thrift.async.AsyncMethodCallback<pushMessageAsync_call> resultHandler) throws org.apache.thrift.TException {
+    @Override
+	public void pushMessageAsync(Message packet, org.apache.thrift.async.AsyncMethodCallback<pushMessageAsync_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       pushMessageAsync_call method_call = new pushMessageAsync_call(packet, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
@@ -275,7 +282,8 @@ import org.slf4j.LoggerFactory;
         this.packet = packet;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+      @Override
+	public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("pushMessageAsync", org.apache.thrift.protocol.TMessageType.CALL, 0));
         pushMessageAsync_args args = new pushMessageAsync_args();
         args.setPacket(packet);
@@ -292,7 +300,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void terminateSession(String sessionid, org.apache.thrift.async.AsyncMethodCallback<terminateSession_call> resultHandler) throws org.apache.thrift.TException {
+    @Override
+	public void terminateSession(String sessionid, org.apache.thrift.async.AsyncMethodCallback<terminateSession_call> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       terminateSession_call method_call = new terminateSession_call(sessionid, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
@@ -306,7 +315,8 @@ import org.slf4j.LoggerFactory;
         this.sessionid = sessionid;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+      @Override
+	public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("terminateSession", org.apache.thrift.protocol.TMessageType.CALL, 0));
         terminateSession_args args = new terminateSession_args();
         args.setSessionid(sessionid);
@@ -349,15 +359,18 @@ import org.slf4j.LoggerFactory;
         super("getPackets");
       }
 
-      public getPackets_args getEmptyArgsInstance() {
+      @Override
+	public getPackets_args getEmptyArgsInstance() {
         return new getPackets_args();
       }
 
-      protected boolean isOneway() {
+      @Override
+	protected boolean isOneway() {
         return false;
       }
 
-      public getPackets_result getResult(I iface, getPackets_args args) throws org.apache.thrift.TException {
+      @Override
+	public getPackets_result getResult(I iface, getPackets_args args) throws org.apache.thrift.TException {
         getPackets_result result = new getPackets_result();
         result.success = iface.getPackets(args.sessionid);
         return result;
@@ -369,15 +382,18 @@ import org.slf4j.LoggerFactory;
         super("pushMessageSync");
       }
 
-      public pushMessageSync_args getEmptyArgsInstance() {
+      @Override
+	public pushMessageSync_args getEmptyArgsInstance() {
         return new pushMessageSync_args();
       }
 
-      protected boolean isOneway() {
+      @Override
+	protected boolean isOneway() {
         return false;
       }
 
-      public pushMessageSync_result getResult(I iface, pushMessageSync_args args) throws org.apache.thrift.TException {
+      @Override
+	public pushMessageSync_result getResult(I iface, pushMessageSync_args args) throws org.apache.thrift.TException {
         pushMessageSync_result result = new pushMessageSync_result();
         result.success = iface.pushMessageSync(args.packet);
         result.setSuccessIsSet(true);
@@ -390,15 +406,18 @@ import org.slf4j.LoggerFactory;
         super("pushMessageAsync");
       }
 
-      public pushMessageAsync_args getEmptyArgsInstance() {
+      @Override
+	public pushMessageAsync_args getEmptyArgsInstance() {
         return new pushMessageAsync_args();
       }
 
-      protected boolean isOneway() {
+      @Override
+	protected boolean isOneway() {
         return true;
       }
 
-      public org.apache.thrift.TBase getResult(I iface, pushMessageAsync_args args) throws org.apache.thrift.TException {
+      @Override
+	public org.apache.thrift.TBase getResult(I iface, pushMessageAsync_args args) throws org.apache.thrift.TException {
         iface.pushMessageAsync(args.packet);
         return null;
       }
@@ -409,15 +428,18 @@ import org.slf4j.LoggerFactory;
         super("terminateSession");
       }
 
-      public terminateSession_args getEmptyArgsInstance() {
+      @Override
+	public terminateSession_args getEmptyArgsInstance() {
         return new terminateSession_args();
       }
 
-      protected boolean isOneway() {
+      @Override
+	protected boolean isOneway() {
         return false;
       }
 
-      public terminateSession_result getResult(I iface, terminateSession_args args) throws org.apache.thrift.TException {
+      @Override
+	public terminateSession_result getResult(I iface, terminateSession_args args) throws org.apache.thrift.TException {
         terminateSession_result result = new terminateSession_result();
         iface.terminateSession(args.sessionid);
         return result;
@@ -488,11 +510,13 @@ import org.slf4j.LoggerFactory;
         _fieldName = fieldName;
       }
 
-      public short getThriftFieldId() {
+      @Override
+	public short getThriftFieldId() {
         return _thriftId;
       }
 
-      public String getFieldName() {
+      @Override
+	public String getFieldName() {
         return _fieldName;
       }
     }
@@ -526,7 +550,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public getPackets_args deepCopy() {
+    @Override
+	public getPackets_args deepCopy() {
       return new getPackets_args(this);
     }
 
@@ -559,7 +584,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void setFieldValue(_Fields field, Object value) {
+    @Override
+	public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SESSIONID:
         if (value == null) {
@@ -572,7 +598,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public Object getFieldValue(_Fields field) {
+    @Override
+	public Object getFieldValue(_Fields field) {
       switch (field) {
       case SESSIONID:
         return getSessionid();
@@ -582,7 +609,8 @@ import org.slf4j.LoggerFactory;
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
+    @Override
+	public boolean isSet(_Fields field) {
       if (field == null) {
         throw new IllegalArgumentException();
       }
@@ -624,13 +652,14 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public int compareTo(getPackets_args other) {
+    @Override
+	public int compareTo(getPackets_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getPackets_args typedOther = (getPackets_args)other;
+      getPackets_args typedOther = other;
 
       lastComparison = Boolean.valueOf(isSetSessionid()).compareTo(typedOther.isSetSessionid());
       if (lastComparison != 0) {
@@ -645,15 +674,18 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public _Fields fieldForId(int fieldId) {
+    @Override
+	public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
       schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
     }
 
@@ -695,14 +727,16 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class getPackets_argsStandardSchemeFactory implements SchemeFactory {
-      public getPackets_argsStandardScheme getScheme() {
+      @Override
+	public getPackets_argsStandardScheme getScheme() {
         return new getPackets_argsStandardScheme();
       }
     }
 
     private static class getPackets_argsStandardScheme extends StandardScheme<getPackets_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getPackets_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, getPackets_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -731,7 +765,8 @@ import org.slf4j.LoggerFactory;
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getPackets_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, getPackets_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -747,7 +782,8 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class getPackets_argsTupleSchemeFactory implements SchemeFactory {
-      public getPackets_argsTupleScheme getScheme() {
+      @Override
+	public getPackets_argsTupleScheme getScheme() {
         return new getPackets_argsTupleScheme();
       }
     }
@@ -842,11 +878,13 @@ import org.slf4j.LoggerFactory;
         _fieldName = fieldName;
       }
 
-      public short getThriftFieldId() {
+      @Override
+	public short getThriftFieldId() {
         return _thriftId;
       }
 
-      public String getFieldName() {
+      @Override
+	public String getFieldName() {
         return _fieldName;
       }
     }
@@ -887,7 +925,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public getPackets_result deepCopy() {
+    @Override
+	public getPackets_result deepCopy() {
       return new getPackets_result(this);
     }
 
@@ -935,7 +974,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void setFieldValue(_Fields field, Object value) {
+    @Override
+	public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
         if (value == null) {
@@ -948,7 +988,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public Object getFieldValue(_Fields field) {
+    @Override
+	public Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
         return getSuccess();
@@ -958,7 +999,8 @@ import org.slf4j.LoggerFactory;
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
+    @Override
+	public boolean isSet(_Fields field) {
       if (field == null) {
         throw new IllegalArgumentException();
       }
@@ -1000,13 +1042,14 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public int compareTo(getPackets_result other) {
+    @Override
+	public int compareTo(getPackets_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      getPackets_result typedOther = (getPackets_result)other;
+      getPackets_result typedOther = other;
 
       lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
       if (lastComparison != 0) {
@@ -1021,15 +1064,18 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public _Fields fieldForId(int fieldId) {
+    @Override
+	public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
       schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
       }
 
@@ -1071,14 +1117,16 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class getPackets_resultStandardSchemeFactory implements SchemeFactory {
-      public getPackets_resultStandardScheme getScheme() {
+      @Override
+	public getPackets_resultStandardScheme getScheme() {
         return new getPackets_resultStandardScheme();
       }
     }
 
     private static class getPackets_resultStandardScheme extends StandardScheme<getPackets_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getPackets_result struct) throws org.apache.thrift.TException {
+      @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, getPackets_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -1117,7 +1165,8 @@ import org.slf4j.LoggerFactory;
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getPackets_result struct) throws org.apache.thrift.TException {
+      @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, getPackets_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -1140,7 +1189,8 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class getPackets_resultTupleSchemeFactory implements SchemeFactory {
-      public getPackets_resultTupleScheme getScheme() {
+      @Override
+	public getPackets_resultTupleScheme getScheme() {
         return new getPackets_resultTupleScheme();
       }
     }
@@ -1250,11 +1300,13 @@ import org.slf4j.LoggerFactory;
         _fieldName = fieldName;
       }
 
-      public short getThriftFieldId() {
+      @Override
+	public short getThriftFieldId() {
         return _thriftId;
       }
 
-      public String getFieldName() {
+      @Override
+	public String getFieldName() {
         return _fieldName;
       }
     }
@@ -1288,7 +1340,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public pushMessageSync_args deepCopy() {
+    @Override
+	public pushMessageSync_args deepCopy() {
       return new pushMessageSync_args(this);
     }
 
@@ -1321,7 +1374,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void setFieldValue(_Fields field, Object value) {
+    @Override
+	public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case PACKET:
         if (value == null) {
@@ -1334,7 +1388,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public Object getFieldValue(_Fields field) {
+    @Override
+	public Object getFieldValue(_Fields field) {
       switch (field) {
       case PACKET:
         return getPacket();
@@ -1344,7 +1399,8 @@ import org.slf4j.LoggerFactory;
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
+    @Override
+	public boolean isSet(_Fields field) {
       if (field == null) {
         throw new IllegalArgumentException();
       }
@@ -1386,13 +1442,14 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public int compareTo(pushMessageSync_args other) {
+    @Override
+	public int compareTo(pushMessageSync_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      pushMessageSync_args typedOther = (pushMessageSync_args)other;
+      pushMessageSync_args typedOther = other;
 
       lastComparison = Boolean.valueOf(isSetPacket()).compareTo(typedOther.isSetPacket());
       if (lastComparison != 0) {
@@ -1407,15 +1464,18 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public _Fields fieldForId(int fieldId) {
+    @Override
+	public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
       schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
     }
 
@@ -1460,14 +1520,16 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class pushMessageSync_argsStandardSchemeFactory implements SchemeFactory {
-      public pushMessageSync_argsStandardScheme getScheme() {
+      @Override
+	public pushMessageSync_argsStandardScheme getScheme() {
         return new pushMessageSync_argsStandardScheme();
       }
     }
 
     private static class pushMessageSync_argsStandardScheme extends StandardScheme<pushMessageSync_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, pushMessageSync_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, pushMessageSync_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -1497,7 +1559,8 @@ import org.slf4j.LoggerFactory;
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, pushMessageSync_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, pushMessageSync_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -1513,7 +1576,8 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class pushMessageSync_argsTupleSchemeFactory implements SchemeFactory {
-      public pushMessageSync_argsTupleScheme getScheme() {
+      @Override
+	public pushMessageSync_argsTupleScheme getScheme() {
         return new pushMessageSync_argsTupleScheme();
       }
     }
@@ -1609,11 +1673,13 @@ import org.slf4j.LoggerFactory;
         _fieldName = fieldName;
       }
 
-      public short getThriftFieldId() {
+      @Override
+	public short getThriftFieldId() {
         return _thriftId;
       }
 
-      public String getFieldName() {
+      @Override
+	public String getFieldName() {
         return _fieldName;
       }
     }
@@ -1649,7 +1715,8 @@ import org.slf4j.LoggerFactory;
       this.success = other.success;
     }
 
-    public pushMessageSync_result deepCopy() {
+    @Override
+	public pushMessageSync_result deepCopy() {
       return new pushMessageSync_result(this);
     }
 
@@ -1682,7 +1749,8 @@ import org.slf4j.LoggerFactory;
       __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
-    public void setFieldValue(_Fields field, Object value) {
+    @Override
+	public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SUCCESS:
         if (value == null) {
@@ -1695,7 +1763,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public Object getFieldValue(_Fields field) {
+    @Override
+	public Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
         return Integer.valueOf(getSuccess());
@@ -1705,7 +1774,8 @@ import org.slf4j.LoggerFactory;
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
+    @Override
+	public boolean isSet(_Fields field) {
       if (field == null) {
         throw new IllegalArgumentException();
       }
@@ -1747,13 +1817,14 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public int compareTo(pushMessageSync_result other) {
+    @Override
+	public int compareTo(pushMessageSync_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      pushMessageSync_result typedOther = (pushMessageSync_result)other;
+      pushMessageSync_result typedOther = other;
 
       lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
       if (lastComparison != 0) {
@@ -1768,15 +1839,18 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public _Fields fieldForId(int fieldId) {
+    @Override
+	public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
       schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
       }
 
@@ -1816,14 +1890,16 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class pushMessageSync_resultStandardSchemeFactory implements SchemeFactory {
-      public pushMessageSync_resultStandardScheme getScheme() {
+      @Override
+	public pushMessageSync_resultStandardScheme getScheme() {
         return new pushMessageSync_resultStandardScheme();
       }
     }
 
     private static class pushMessageSync_resultStandardScheme extends StandardScheme<pushMessageSync_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, pushMessageSync_result struct) throws org.apache.thrift.TException {
+      @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, pushMessageSync_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -1852,7 +1928,8 @@ import org.slf4j.LoggerFactory;
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, pushMessageSync_result struct) throws org.apache.thrift.TException {
+      @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, pushMessageSync_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -1868,7 +1945,8 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class pushMessageSync_resultTupleSchemeFactory implements SchemeFactory {
-      public pushMessageSync_resultTupleScheme getScheme() {
+      @Override
+	public pushMessageSync_resultTupleScheme getScheme() {
         return new pushMessageSync_resultTupleScheme();
       }
     }
@@ -1963,11 +2041,13 @@ import org.slf4j.LoggerFactory;
         _fieldName = fieldName;
       }
 
-      public short getThriftFieldId() {
+      @Override
+	public short getThriftFieldId() {
         return _thriftId;
       }
 
-      public String getFieldName() {
+      @Override
+	public String getFieldName() {
         return _fieldName;
       }
     }
@@ -2001,7 +2081,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public pushMessageAsync_args deepCopy() {
+    @Override
+	public pushMessageAsync_args deepCopy() {
       return new pushMessageAsync_args(this);
     }
 
@@ -2034,7 +2115,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void setFieldValue(_Fields field, Object value) {
+    @Override
+	public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case PACKET:
         if (value == null) {
@@ -2047,7 +2129,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public Object getFieldValue(_Fields field) {
+    @Override
+	public Object getFieldValue(_Fields field) {
       switch (field) {
       case PACKET:
         return getPacket();
@@ -2057,7 +2140,8 @@ import org.slf4j.LoggerFactory;
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
+    @Override
+	public boolean isSet(_Fields field) {
       if (field == null) {
         throw new IllegalArgumentException();
       }
@@ -2099,13 +2183,14 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public int compareTo(pushMessageAsync_args other) {
+    @Override
+	public int compareTo(pushMessageAsync_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      pushMessageAsync_args typedOther = (pushMessageAsync_args)other;
+      pushMessageAsync_args typedOther = other;
 
       lastComparison = Boolean.valueOf(isSetPacket()).compareTo(typedOther.isSetPacket());
       if (lastComparison != 0) {
@@ -2120,15 +2205,18 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public _Fields fieldForId(int fieldId) {
+    @Override
+	public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
       schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
     }
 
@@ -2173,14 +2261,16 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class pushMessageAsync_argsStandardSchemeFactory implements SchemeFactory {
-      public pushMessageAsync_argsStandardScheme getScheme() {
+      @Override
+	public pushMessageAsync_argsStandardScheme getScheme() {
         return new pushMessageAsync_argsStandardScheme();
       }
     }
 
     private static class pushMessageAsync_argsStandardScheme extends StandardScheme<pushMessageAsync_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, pushMessageAsync_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, pushMessageAsync_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -2210,7 +2300,8 @@ import org.slf4j.LoggerFactory;
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, pushMessageAsync_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, pushMessageAsync_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -2226,7 +2317,8 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class pushMessageAsync_argsTupleSchemeFactory implements SchemeFactory {
-      public pushMessageAsync_argsTupleScheme getScheme() {
+      @Override
+	public pushMessageAsync_argsTupleScheme getScheme() {
         return new pushMessageAsync_argsTupleScheme();
       }
     }
@@ -2322,11 +2414,13 @@ import org.slf4j.LoggerFactory;
         _fieldName = fieldName;
       }
 
-      public short getThriftFieldId() {
+      @Override
+	public short getThriftFieldId() {
         return _thriftId;
       }
 
-      public String getFieldName() {
+      @Override
+	public String getFieldName() {
         return _fieldName;
       }
     }
@@ -2360,7 +2454,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public terminateSession_args deepCopy() {
+    @Override
+	public terminateSession_args deepCopy() {
       return new terminateSession_args(this);
     }
 
@@ -2393,7 +2488,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public void setFieldValue(_Fields field, Object value) {
+    @Override
+	public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case SESSIONID:
         if (value == null) {
@@ -2406,7 +2502,8 @@ import org.slf4j.LoggerFactory;
       }
     }
 
-    public Object getFieldValue(_Fields field) {
+    @Override
+	public Object getFieldValue(_Fields field) {
       switch (field) {
       case SESSIONID:
         return getSessionid();
@@ -2416,7 +2513,8 @@ import org.slf4j.LoggerFactory;
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
+    @Override
+	public boolean isSet(_Fields field) {
       if (field == null) {
         throw new IllegalArgumentException();
       }
@@ -2458,13 +2556,14 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public int compareTo(terminateSession_args other) {
+    @Override
+	public int compareTo(terminateSession_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      terminateSession_args typedOther = (terminateSession_args)other;
+      terminateSession_args typedOther = other;
 
       lastComparison = Boolean.valueOf(isSetSessionid()).compareTo(typedOther.isSetSessionid());
       if (lastComparison != 0) {
@@ -2479,15 +2578,18 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public _Fields fieldForId(int fieldId) {
+    @Override
+	public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
       schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
     }
 
@@ -2529,14 +2631,16 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class terminateSession_argsStandardSchemeFactory implements SchemeFactory {
-      public terminateSession_argsStandardScheme getScheme() {
+      @Override
+	public terminateSession_argsStandardScheme getScheme() {
         return new terminateSession_argsStandardScheme();
       }
     }
 
     private static class terminateSession_argsStandardScheme extends StandardScheme<terminateSession_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, terminateSession_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, terminateSession_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -2565,7 +2669,8 @@ import org.slf4j.LoggerFactory;
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, terminateSession_args struct) throws org.apache.thrift.TException {
+      @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, terminateSession_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -2581,7 +2686,8 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class terminateSession_argsTupleSchemeFactory implements SchemeFactory {
-      public terminateSession_argsTupleScheme getScheme() {
+      @Override
+	public terminateSession_argsTupleScheme getScheme() {
         return new terminateSession_argsTupleScheme();
       }
     }
@@ -2672,11 +2778,13 @@ import org.slf4j.LoggerFactory;
         _fieldName = fieldName;
       }
 
-      public short getThriftFieldId() {
+      @Override
+	public short getThriftFieldId() {
         return _thriftId;
       }
 
-      public String getFieldName() {
+      @Override
+	public String getFieldName() {
         return _fieldName;
       }
     }
@@ -2696,7 +2804,8 @@ import org.slf4j.LoggerFactory;
     public terminateSession_result(terminateSession_result other) {
     }
 
-    public terminateSession_result deepCopy() {
+    @Override
+	public terminateSession_result deepCopy() {
       return new terminateSession_result(this);
     }
 
@@ -2704,19 +2813,22 @@ import org.slf4j.LoggerFactory;
     public void clear() {
     }
 
-    public void setFieldValue(_Fields field, Object value) {
+    @Override
+	public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       }
     }
 
-    public Object getFieldValue(_Fields field) {
+    @Override
+	public Object getFieldValue(_Fields field) {
       switch (field) {
       }
       throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
+    @Override
+	public boolean isSet(_Fields field) {
       if (field == null) {
         throw new IllegalArgumentException();
       }
@@ -2747,26 +2859,30 @@ import org.slf4j.LoggerFactory;
       return 0;
     }
 
-    public int compareTo(terminateSession_result other) {
+    @Override
+	public int compareTo(terminateSession_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
-      terminateSession_result typedOther = (terminateSession_result)other;
+      terminateSession_result typedOther = other;
 
       return 0;
     }
 
-    public _Fields fieldForId(int fieldId) {
+    @Override
+	public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
       schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
       schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
       }
 
@@ -2801,14 +2917,16 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class terminateSession_resultStandardSchemeFactory implements SchemeFactory {
-      public terminateSession_resultStandardScheme getScheme() {
+      @Override
+	public terminateSession_resultStandardScheme getScheme() {
         return new terminateSession_resultStandardScheme();
       }
     }
 
     private static class terminateSession_resultStandardScheme extends StandardScheme<terminateSession_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, terminateSession_result struct) throws org.apache.thrift.TException {
+      @Override
+	public void read(org.apache.thrift.protocol.TProtocol iprot, terminateSession_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -2829,7 +2947,8 @@ import org.slf4j.LoggerFactory;
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, terminateSession_result struct) throws org.apache.thrift.TException {
+      @Override
+	public void write(org.apache.thrift.protocol.TProtocol oprot, terminateSession_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -2840,7 +2959,8 @@ import org.slf4j.LoggerFactory;
     }
 
     private static class terminateSession_resultTupleSchemeFactory implements SchemeFactory {
-      public terminateSession_resultTupleScheme getScheme() {
+      @Override
+	public terminateSession_resultTupleScheme getScheme() {
         return new terminateSession_resultTupleScheme();
       }
     }

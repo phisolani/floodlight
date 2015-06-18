@@ -21,6 +21,7 @@ import static org.junit.Assert.assertArrayEquals;
 
 import java.util.List;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -47,12 +48,12 @@ public class BasicFactoryTest extends TestCase {
         ChannelBuffer bb2 = ChannelBuffers.dynamicBuffer();
         m.writeTo(bb);
         bb2.writeBytes(bb, bb.readableBytes()-1);
-        TestCase.assertNull(factory.parseMessage(bb2));
+        Assert.assertNull(factory.parseMessage(bb2));
         bb2.writeByte(bb.readByte());
         List<OFMessage> message = factory.parseMessage(bb2);
-        TestCase.assertNotNull(message);
-        TestCase.assertEquals(message.size(), 1);
-        TestCase.assertTrue(message.get(0).getType() == OFType.ECHO_REQUEST);
+        Assert.assertNotNull(message);
+        Assert.assertEquals(message.size(), 1);
+        Assert.assertTrue(message.get(0).getType() == OFType.ECHO_REQUEST);
     }
 
     public void testInvalidMsgParse() throws MessageParseException {
@@ -65,7 +66,7 @@ public class BasicFactoryTest extends TestCase {
         ChannelBuffer bb = ChannelBuffers.dynamicBuffer();
         m.writeTo(bb);
         List<OFMessage> message = factory.parseMessage(bb);
-        TestCase.assertNull(message);
+        Assert.assertNull(message);
     }
 
     public void testCurrouptedMsgParse() throws MessageParseException {
@@ -81,7 +82,7 @@ public class BasicFactoryTest extends TestCase {
                 factory.parseMessage(bb);
         }
         catch(Exception e) {
-            TestCase.assertEquals(MessageParseException.class, e.getClass());
+            Assert.assertEquals(MessageParseException.class, e.getClass());
         }
     }
 

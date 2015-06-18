@@ -19,6 +19,7 @@ package org.openflow.util;
 
 import org.junit.Test;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 /**
@@ -35,7 +36,7 @@ public class HexStringTest extends TestCase {
         String dpidStr = "00:00:00:23:20:2d:16:71";
         long dpid = HexString.toLong(dpidStr);
         String testStr = HexString.toHexString(dpid);
-        TestCase.assertEquals(dpidStr, testStr);
+        Assert.assertEquals(dpidStr, testStr);
     }
     
     @Test
@@ -43,7 +44,7 @@ public class HexStringTest extends TestCase {
         String dpidStr = "3e:1f:01:fc:72:8c:63:31";
         long valid = 0x3e1f01fc728c6331L;
         long testLong = HexString.toLong(dpidStr);
-        TestCase.assertEquals(valid, testLong);
+        Assert.assertEquals(valid, testLong);
     }
     
     @Test
@@ -51,7 +52,7 @@ public class HexStringTest extends TestCase {
         String dpidStr = "ca:7c:5e:d1:64:7a:95:9b";
         long valid = -3856102927509056101L;
         long testLong = HexString.toLong(dpidStr);
-        TestCase.assertEquals(valid, testLong);
+        Assert.assertEquals(valid, testLong);
     }
     
     @Test
@@ -71,7 +72,7 @@ public class HexStringTest extends TestCase {
         byte[] dpid = { 0, 0, 0, 0, 0, 0, 0, -1 };
         String valid = "00:00:00:00:00:00:00:ff";
         String testString = HexString.toHexString(dpid);
-        TestCase.assertEquals(valid, testString);
+        Assert.assertEquals(valid, testString);
     }
     
     @Test

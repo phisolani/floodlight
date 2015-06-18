@@ -17,6 +17,7 @@
 
 package org.openflow.protocol;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class OFMessageContextStoreTest extends TestCase {
@@ -26,6 +27,6 @@ public class OFMessageContextStoreTest extends TestCase {
         String key = "mykey";
         String value = "myvalue";
         store.put(key, value);
-        TestCase.assertEquals(value, store.get(key));
+        Assert.assertEquals(value, store.get(key));
     }
 }

@@ -54,7 +54,8 @@ public class PacketStreamerServer {
             processor = new PacketStreamer.Processor<PacketStreamerHandler>(handler);
 
             Runnable simple = new Runnable() {
-                public void run() {
+                @Override
+				public void run() {
                     hshaServer(processor);
                 }
             };

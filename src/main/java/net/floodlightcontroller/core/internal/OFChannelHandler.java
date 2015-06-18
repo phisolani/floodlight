@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.floodlightcontroller.core.FloodlightContext;
 import net.floodlightcontroller.core.IOFSwitch;
@@ -16,6 +17,9 @@ import net.floodlightcontroller.core.IOFSwitch.PortChangeEvent;
 import net.floodlightcontroller.core.annotations.LogMessageDoc;
 import net.floodlightcontroller.core.annotations.LogMessageDocs;
 import net.floodlightcontroller.core.internal.Controller.Counters;
+import net.floodlightcontroller.core.statistics.Counter;
+import net.floodlightcontroller.core.statistics.PerSwitchStatistics;
+import net.floodlightcontroller.core.statistics.StatisticsAggregator;
 import net.floodlightcontroller.debugcounter.IDebugCounterService.CounterException;
 import net.floodlightcontroller.storage.IResultSet;
 import net.floodlightcontroller.storage.StorageException;
@@ -83,7 +87,7 @@ import com.bigswitch.floodlight.vendor.OFBsnL2TableSetVendorData;
  */
 class OFChannelHandler
     extends IdleStateAwareChannelHandler {
-
+		
     private static final Logger log = LoggerFactory.getLogger(OFChannelHandler.class);
 
     private static final long DEFAULT_ROLE_TIMEOUT_MS = 10*1000; // 10 sec
@@ -444,10 +448,21 @@ class OFChannelHandler
          * a request to clear all FlowMods.
          * Next state is WAIT_FEATURES_REPLY
          */
-        WAIT_HELLO(false) {
+        WAIT_HELLO(false) {	     	
+        	/**
+    		 * @author PHISOLANI
+    		 * @param h = channel
+    		 * @param m = Hello message
+    		 * @TODO: Count all Hello messages
+    		 */	
             @Override
             void processOFHello(OFChannelHandler h, OFHello m)
                     throws IOException {
+            	// Count hello reply messages
+//            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(HexString.toHexString(h.featuresReply.getDatapathId()))) {
+//            		PerSwitchStatistics.getSwitches_map().get(HexString.toHexString(h.featuresReply.getDatapathId()))
+//							.addHelloReplyMessage(m.getLength());
+//				}
                 h.sendHandShakeMessage(OFType.FEATURES_REQUEST);
                 h.setState(WAIT_FEATURES_REPLY);
             }
@@ -587,6 +602,13 @@ class OFChannelHandler
                             h.getSwitchInfoString(),
                             m.getMissSendLength());
                 }
+                //PHISOLANI
+                //Count Configurations Request messages
+                if (PerSwitchStatistics.createSwitchCounterIfNotExists(HexString.toHexString(h.featuresReply.getDatapathId()))) {
+            		PerSwitchStatistics.getSwitches_map().get(HexString.toHexString(h.featuresReply.getDatapathId()))
+							.addConfigurationsReplyMessage(m.getLength());
+				}
+                
                 h.sendHandshakeDescriptionStatsRequest();
                 h.setState(WAIT_DESCRIPTION_STAT_REPLY);
             }
@@ -594,6 +616,12 @@ class OFChannelHandler
             @Override
             void processOFBarrierReply(OFChannelHandler h, OFBarrierReply m) {
                 // do nothing;
+            	//PHISOLANI
+            	//Count barrier reply messages            	
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(HexString.toHexString(h.featuresReply.getDatapathId()))) {
+            		PerSwitchStatistics.getSwitches_map().get(HexString.toHexString(h.featuresReply.getDatapathId()))
+							.addBarrierReplyMessage(m.getLength());
+				}
             }
 
             @Override
@@ -611,6 +639,12 @@ class OFChannelHandler
 
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
+            	//PHISOLANI
+            	//Count error messages            	
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(HexString.toHexString(h.featuresReply.getDatapathId()))) {
+            		PerSwitchStatistics.getSwitches_map().get(HexString.toHexString(h.featuresReply.getDatapathId()))
+							.addErrorMessage(m.getLength());
+				}
                 if (m.getErrorType() == OFErrorType.OFPET_BAD_REQUEST.getValue()
                         && m.getErrorCode() ==
                             OFBadRequestCode.OFPBRC_BAD_VENDOR.ordinal()) {
@@ -759,6 +793,12 @@ class OFChannelHandler
             @Override
             void processOFVendor(OFChannelHandler h, OFVendor m)
                     throws IOException {
+            	//PHISOLANI TODO
+            	//System.out.println("VENDOR reply message -> processOFVendor" + m);
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw.getStringId())) {
+            		PerSwitchStatistics.getSwitches_map().get(h.sw.getStringId())
+							.addVendorReplyMessage(m.getLength());
+				}
                 Role role = extractNiciraRoleReply(h, m);
                 // If role == null it measn the message wasn't really a
                 // Nicira role reply. We ignore this case.
@@ -844,22 +884,45 @@ class OFChannelHandler
                 h.dispatchMessage(m);
             }
 
+            /**
+    		 * @author PHISOLANI
+    		 * @param h = channel
+    		 * @value h.sw.getStringId() = Switch DPID
+    		 * @TODO: Count all ReadState Reply messages
+    		 */
             @Override
             void processOFStatisticsReply(OFChannelHandler h,
                                           OFStatisticsReply m) {
+            	//System.out.println(h);
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw.getStringId())) {
+            		PerSwitchStatistics.getSwitches_map().get(h.sw.getStringId())
+							.addReadStateReplyMessage(m.getLength());
+				}
                 h.sw.deliverStatisticsReply(m);
             }
-
+            
+            /**
+    		 * @author PHISOLANI
+    		 * @param h = channel
+    		 * @value h.sw.getStringId() = Switch DPID
+    		 * @TODO: Count all FeaturesReply messages
+    		 */
             @Override
             void processOFFeaturesReply(OFChannelHandler h, OFFeaturesReply  m)
                     throws IOException {
+            	//System.out.println(h);
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw.getStringId())) {
+            		PerSwitchStatistics.getSwitches_map().get(h.sw.getStringId())
+							.addFeaturesReplyMessage(m.getLength());
+				}
+            	//Ainda nao consegui acionar essa função
                 h.sw.setFeaturesReply(m);
                 h.sw.deliverOFFeaturesReply(m);
             }
 
             @Override
             void processOFVendor(OFChannelHandler h, OFVendor m)
-                    throws IOException {
+                    throws IOException {            	
                 Role role = extractNiciraRoleReply(h, m);
                 // If role == null it means the message wasn't really a
                 // Nicira role reply. We ignore just dispatch it to the
@@ -870,20 +933,65 @@ class OFChannelHandler
                     h.dispatchMessage(m);
             }
 
+            /**
+    		 * @author PHISOLANI
+    		 * @param h = channel
+    		 * @value h.sw.getStringId() = Switch DPID
+    		 * @TODO: Count all PortStatus messages
+    		 */
             @Override
             void processOFPortStatus(OFChannelHandler h, OFPortStatus m)
                     throws IOException {
+            	//System.out.println(h);
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw.getStringId())) {
+            		PerSwitchStatistics.getSwitches_map().get(h.sw.getStringId())
+							.addPortStatusMessage(m.getLength());
+				}
                 handlePortStatusMessage(h, m, true);
             }
-
+            
+            /**
+    		 * @author PHISOLANI
+    		 * @param h = channel
+    		 * @value h.sw.getStringId() = Switch DPID
+    		 * @TODO: Count all Packet-In messages
+    		 */		
             @Override
             void processOFPacketIn(OFChannelHandler h, OFPacketIn m) throws IOException {
-                h.dispatchMessage(m);
+            	//System.out.println("PACKET IN -> " + h.sw.getStringId() + "  " + h.sw.getNextTransactionId());
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw.getStringId())) {
+            		PerSwitchStatistics.getSwitches_map().get(h.sw.getStringId())
+							.addPacketInMessage(m.getLength());
+				}
+            	
+            	byte[] data = m.getPacketData();
+				if ((data.length > 14)
+						&& (((data[12] == (byte) 0x88) && (data[13] == (byte) 0xcc)) || ((data[12] == (byte) 0x89) && (data[13] == (byte) 0x42)))) {
+					// This packet is LLDP
+				} else {
+					// This packet is not LLDP
+					// TODO: Count this packet please
+					StatisticsAggregator.addPacketInMessage(m,
+	            			h.sw.getStringId(), new AtomicInteger(h.sw.getNextTransactionId()));	                
+				}            	
+            	//System.out.println("Read " + m.getType().toString());
+            	h.dispatchMessage(m);
             }
 
+            /**
+    		 * @author PHISOLANI
+    		 * @param h = channel
+    		 * @value h.sw.getStringId() = Switch DPID
+    		 * @TODO: Count all FlowRemoved messages
+    		 */	
             @Override
             void processOFFlowRemoved(OFChannelHandler h,
                                       OFFlowRemoved m) throws IOException {
+            	// Ainda nao acionei esse tipo de mensagem
+            	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw.getStringId())) {
+            		PerSwitchStatistics.getSwitches_map().get(h.sw.getStringId())
+							.addFlowRemovedMessage(m.getLength());
+				}
                 h.dispatchMessage(m);
             }
         },
@@ -1229,11 +1337,27 @@ class OFChannelHandler
 
         void processOFEchoRequest(OFChannelHandler h, OFEchoRequest m)
             throws IOException {
+        	//PHISOLANI
+        	//System.out.println("Echo request - processOFEchoRequest" );
+        	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw
+					.getStringId())) {
+				PerSwitchStatistics.getSwitches_map()
+						.get(h.sw.getStringId())
+						.addEchoRequestMessage(m.getLength());
+			}
             OFEchoReply reply = (OFEchoReply)
                     BasicFactory.getInstance().getMessage(OFType.ECHO_REPLY);
             reply.setXid(m.getXid());
             reply.setPayload(m.getPayload());
             reply.setLengthU(m.getLengthU());
+            //PHISOLANI
+        	//System.out.println("Echo reply - processOFEchoReply" );
+        	if (PerSwitchStatistics.createSwitchCounterIfNotExists(h.sw
+					.getStringId())) {
+				PerSwitchStatistics.getSwitches_map()
+						.get(h.sw.getStringId())
+						.addEchoReplyMessage(m.getLength());
+			}
             h.channel.write(Collections.singletonList(reply));
         }
 
@@ -1288,6 +1412,7 @@ class OFChannelHandler
 
         void processOFVendor(OFChannelHandler h, OFVendor m)
                 throws IOException {
+        	System.out.println("VENDOR reply message -> proccessOFVendor" + m);
             // TODO: it might make sense to parse the vendor message here
             // into the known vendor messages we support and then call more
             // spefic event handlers
@@ -1719,12 +1844,17 @@ class OFChannelHandler
                 .getMessage(OFType.BARRIER_REQUEST);
         barrier.setXid(handshakeTransactionIds--);
         msglist.add(barrier);
-
+        
         // Verify (need barrier?)
         OFGetConfigRequest configReq = (OFGetConfigRequest)
                 BasicFactory.getInstance().getMessage(OFType.GET_CONFIG_REQUEST);
         configReq.setXid(handshakeTransactionIds--);
-        msglist.add(configReq);
+        msglist.add(configReq);  
+        //Count Configurations Request messages
+        if (PerSwitchStatistics.createSwitchCounterIfNotExists(HexString.toHexString(this.featuresReply.getDatapathId()))) {
+    		PerSwitchStatistics.getSwitches_map().get(HexString.toHexString(this.featuresReply.getDatapathId()))
+					.addConfigurationsRequestMessage(configReq.getLength());
+		}
         channel.write(msglist);
     }
 

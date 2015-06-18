@@ -17,6 +17,7 @@
 
 package org.openflow.protocol;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -37,7 +38,7 @@ public class OFFlowRemovedTest extends OFTestCase {
         bb.clear();
         msg.writeTo(bb);
         msg.readFrom(bb);
-        TestCase.assertEquals(OFType.FLOW_REMOVED, msg.getType());
-        TestCase.assertEquals(OFFlowRemovedReason.OFPRR_DELETE, msg.getReason());
+        Assert.assertEquals(OFType.FLOW_REMOVED, msg.getType());
+        Assert.assertEquals(OFFlowRemovedReason.OFPRR_DELETE, msg.getReason());
     }
 }

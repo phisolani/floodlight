@@ -119,7 +119,7 @@ public class TopologyInstanceTest {
             int [][] nptList = ebp[i];
             expected.clear();
             for(int j=0; j<nptList.length; ++j) {
-                npt = new NodePortTuple((long)nptList[j][0], (short)nptList[j][1]);
+                npt = new NodePortTuple(nptList[j][0], (short)nptList[j][1]);
                 expected.add(npt);
             }
             TopologyInstance ti = topologyManager.getCurrentInstance(tunnelsEnabled);
@@ -145,7 +145,7 @@ public class TopologyInstanceTest {
             else if (r[4] == TUNNEL_LINK)
                 type = ILinkDiscovery.LinkType.TUNNEL;
 
-            topologyManager.addOrUpdateLink((long)r[0], (short)r[1], (long)r[2], (short)r[3], type);
+            topologyManager.addOrUpdateLink(r[0], (short)r[1], r[2], (short)r[3], type);
         }
         topologyManager.createNewInstance();
     }
@@ -258,8 +258,8 @@ public class TopologyInstanceTest {
 
         // Test 3. Remove links
         {
-            tm.removeLink((long)5,(short)3,(long)6,(short)1);
-            tm.removeLink((long)6,(short)1,(long)5,(short)3);
+            tm.removeLink(5,(short)3,6,(short)1);
+            tm.removeLink(6,(short)1,5,(short)3);
 
             int [][] expectedClusters = {
                                          {1,2,3,4,5},
